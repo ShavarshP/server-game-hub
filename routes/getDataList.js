@@ -4,8 +4,8 @@ const router = Router();
 router.get("/participants", async (req, res) => {
   try {
     res.json([
-      { name: "Shavarsh", type: "maladec" },
       { name: "Armine", type: "gerazancik" },
+      { name: "Shavarsh", type: "maladec" },
       { name: "Artyom", type: "shaxmat" },
       { name: "Artur", type: "ft-t-t-t--t-t-t" },
     ]);

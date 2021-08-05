@@ -13,7 +13,9 @@ app.use(
   })
 );
 
+app.use("/api", require("./routes/authRoutes"));
 app.use("/api", require("./routes/getDataList"));
+// app.use("/api/auth", require("./routes/authRoutes"));
 
 const PORT = 5000;
 async function start() {
