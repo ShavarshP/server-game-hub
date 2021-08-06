@@ -2,15 +2,14 @@ const { Router } = require("express");
 const bcrypt = require("bcryptjs");
 const config = require("config");
 const jwt = require("jsonwebtoken");
-const { check, validationResult } = require("express-validator");
 const User = require("../models/User");
 const router = Router();
 
 router.post("/login", async (req, res) => {
   try {
-    const { email, userName, password } = {
+    const { email, password } = {
       email: "shavarsh101097@gmmai.com",
-      userName: "Yamaklorm",
+
       password: "shavarsh222",
     };
 
