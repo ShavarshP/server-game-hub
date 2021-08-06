@@ -14,22 +14,23 @@ router.post("/login", async (req, res) => {
 
     const user = await User.findOne({ email });
 
-    res.json(user);
-    // if (!user) {
-    //   return res.status(400).json({ message: "User is not found" });
-    // }
+    if (!user) {
+      return res.status(400).json({ message: "User is not found" });
+    }
 
-    // const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
-    // if (!isMatch) {
-    //   return res
-    //     .status(400)
-    //     .json({ message: "Invalid password, please try again" });
-    // }
+    if (!isMatch) {
+      return res
+        .status(400)
+        .json({ message: "Invalid password, please try again" });
+    }
 
-    // const token = jwt.sign({ userId: user.id }, config.get("jwtSecret"), {
-    //   expiresIn: "1h",
-    // });
+    const token = jwt.sign({ userId: user.id }, config.get("jwtSecret"), {
+      expiresIn: "1h",
+    });
+
+    res.json({ token, userId: user.id });
   } catch (e) {
     res.status(500).json({ message: "Something went wrong, please try again" });
   }
