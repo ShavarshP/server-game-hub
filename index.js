@@ -16,6 +16,7 @@ app.use(
 
 app.use("/api", require("./routes/authRoutes"));
 app.use("/api", require("./routes/getDataList"));
+app.use("/api", require("./routes/login"));
 app.use(cors());
 // app.use("/api/auth", require("./routes/authRoutes"));
 

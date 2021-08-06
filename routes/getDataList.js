@@ -10,7 +10,7 @@ router.get("/participants", async (req, res) => {
       { name: "Artur", type: "ft-t-t-t--t-t-t" },
     ]);
   } catch (e) {
-    res.status(500).json({ message: "Что-то пошло не так, попробуйте снова" });
+    res.status(500).json({ message: "Something went wrong, please try again" });
   }
 });
 
