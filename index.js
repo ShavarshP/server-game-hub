@@ -1,6 +1,5 @@
 const express = require("express");
 const config = require("config");
-const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
@@ -17,7 +16,7 @@ app.use(
 app.use("/api", require("./routes/authRoutes"));
 app.use("/api", require("./routes/getDataList"));
 app.use("/api", require("./routes/login"));
-app.use(cors());
+
 // app.use("/api/auth", require("./routes/authRoutes"));
 
 const PORT = 5000;
