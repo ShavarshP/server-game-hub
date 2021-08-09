@@ -1,20 +1,25 @@
 const { Router } = require("express");
-const Story = require("../models/Link");
+const config = require("config");
+const shortid = require("shortid");
+const Story = require("../models/story");
+const auth = require("../middleware/auth.middleware");
 const router = Router();
 
-router.get("/:code", async (req, res) => {
+router.post("/generate", auth, async (req, res) => {
   try {
-    const link = await Story.findOne({ code: req.params.code });
+    const { userName, clicks, record2048 } = req.body;
 
-    if (link) {
-      link.clicks++;
-      await link.save();
-      return res.redirect(link.from);
+    if (existing) {
+      return res.json({ Story: existing });
     }
 
-    res.status(404).json("not found");
+    const story = new Story({ userName, clicks, record2048 });
+
+    await story.save();
+
+    res.status(201).json({ story });
   } catch (e) {
-    res.status(500).json({ message: "Something went wrong, please try again" });
+    res.status(500).json({ message: "Что-то пошло не так, попробуйте снова" });
   }
 });
 
