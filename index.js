@@ -3,7 +3,9 @@ const config = require("config");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
+const cors = require("cors");
 
+app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
   bodyParser.urlencoded({
@@ -16,7 +18,7 @@ app.use(
 app.use("/api", require("./routes/authRoutes"));
 app.use("/api", require("./routes/getDataList"));
 app.use("/api", require("./routes/login"));
-// app.use("/api/results", require("./routes/gameResults"));
+app.use("/api/results", require("./routes/gameResults"));
 
 // app.use("/api/auth", require("./routes/authRoutes"));
 
