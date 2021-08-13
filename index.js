@@ -18,6 +18,7 @@ app.use(cors());
 app.use("/api", require("./routes/authRoutes"));
 app.use("/api", require("./routes/getDataList"));
 app.use("/api", require("./routes/login"));
+app.use("/api", require("./routes/generate"));
 // app.use("/api/results", require("./routes/gameResults"));
 
 // app.use("/api/auth", require("./routes/authRoutes"));

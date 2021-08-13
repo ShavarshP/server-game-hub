@@ -1,0 +1,15 @@
+const { Router } = require("express");
+const auth = require("../middleware/auth.middleware");
+const router = Router();
+
+router.post("/generate", auth, async (req, res) => {
+  try {
+    const data = req.body;
+    console.log(data);
+
+    res.status(201).json({ link: "shash" });
+  } catch (e) {
+    res.status(500).json({ message: "Что-то пошло не так, попробуйте снова" });
+  }
+});
+module.exports = router;

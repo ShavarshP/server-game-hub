@@ -15,7 +15,7 @@ router.post("/generate", auth, async (req, res) => {
     await story.save();
     res.status(201).json({ story });
   } catch (e) {
-    res.status(500).json({ message: "Что-то пошло не так, попробуйте снова" });
+    res.status(500).json({ message: "Something went wrong, please try again" });
   }
 });
 
