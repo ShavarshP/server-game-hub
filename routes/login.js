@@ -7,10 +7,7 @@ const router = Router();
 
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = {
-      email: "shavarsh101097@gmmai.com",
-      password: "shavarsh222",
-    };
+    const { email, password } = req.body;
 
     const user = await User.findOne({ email });
 
