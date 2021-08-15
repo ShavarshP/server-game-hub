@@ -5,8 +5,8 @@ const router = Router();
 
 router.post("/generate", auth, async (req, res) => {
   try {
-    const { owner, userName } = req.body;
-
+    const userName = req.body.userName;
+    const owner = req.user.userId;
     const story = new Story({ owner, userName });
     await story.save();
     res.status(201).json({ link: "shash" });
