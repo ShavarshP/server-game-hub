@@ -14,7 +14,7 @@ app.use(
   })
 );
 
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use("/api", require("./routes/authRoutes"));
 app.use("/api", require("./routes/getDataList"));
 app.use("/api", require("./routes/login"));
