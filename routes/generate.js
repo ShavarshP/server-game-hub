@@ -6,7 +6,7 @@ const router = Router();
 router.post("/generate", auth, async (req, res) => {
   try {
     const { owner, userName } = req.body;
-    console.log(data);
+
     const story = new Story({ owner, userName });
     await story.save();
     res.status(201).json({ link: "shash" });
