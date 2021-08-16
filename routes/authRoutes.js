@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 // const { check, validationResult } = require("express-validator");
 const User = require("../models/User");
 const router = Router();
-const AuthSchema = require("../validationSchema/schema");
+const { AuthSchema } = require("../validationSchema/schema");
 
 router.post("/register", async (req, res) => {
   try {

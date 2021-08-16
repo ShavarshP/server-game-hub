@@ -6,4 +6,9 @@ const AuthSchema = Joi.object({
   password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
 });
 
-module.exports = AuthSchema;
+const LoginSchema = Joi.object({
+  email: Joi.string().email().lowercase().required(),
+  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+});
+
+module.exports = { AuthSchema, LoginSchema };

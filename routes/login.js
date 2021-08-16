@@ -4,11 +4,16 @@ const config = require("config");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const router = Router();
+const { LoginSchema } = require("../validationSchema/schema");
 
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    const result = LoginSchema.validateAsync({
+      email: email,
+      password: password,
+    });
+    console.log(result);
     const user = await User.findOne({ email });
 
     if (!user) {
