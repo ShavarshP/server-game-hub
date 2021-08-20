@@ -9,7 +9,7 @@ router.post("/generate", auth, async (req, res) => {
     const owner = req.user.userId;
     const story = new Story({ owner, userName });
     await story.save();
-    res.status(201).json({ link: "shash" });
+    res.status(201).json({ link: "maladec" });
   } catch (e) {
     res.status(500).json({ message: "Something went wrong, please try again" });
   }
