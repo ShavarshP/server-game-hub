@@ -1,15 +1,11 @@
 const express = require("express");
 const config = require("config");
 const bodyParser = require("body-parser");
-const http = require("http");
 const mongoose = require("mongoose");
 const app = express();
+const WSServer = require("express-ws")(app);
+// const aWss = WSServer.getWss();
 const cors = require("cors");
-const WebSocket = require("ws");
-
-const server = http.createServer(app);
-
-const webSocketServer = new WebSocket.Server({ server });
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
@@ -25,18 +21,30 @@ app.use("/api", require("./routes/authRoutes"));
 app.use("/api", require("./routes/getDataList"));
 app.use("/api", require("./routes/login"));
 app.use("/api", require("./routes/generate"));
-
-webSocketServer.on("connection", (ws) => {
-  ws.on("message", (m) => {
-    webSocketServer.clients.forEach((client) => client.send(m));
+// app.use("/api/results", require("./routes/gameResults"));
+let sms = "opaopaoppapa";
+app.ws("/io", (ws, req) => {
+  ws.send(sms);
+  ws.on("message", (msg) => {
+    sms = msg;
   });
-
-  ws.on("error", (e) => ws.send(e));
-
-  ws.send("Hi there, I am a WebSocket server");
 });
 
-//maladec
+// app.use("/api/auth", require("./routes/authRoutes"));
+// app.ws("/", (ws, req) => {
+//   ws.on("message", (msg) => {
+//     msg = JSON.parse(msg);
+//     switch (msg.method) {
+//       case "connection":
+//         connectionHandler(ws, msg);
+//         break;
+//       case "draw":
+//         broadcastConnection(ws, msg);
+//         break;
+//     }
+//   });
+// });
+
 const PORT = 5000;
 async function start() {
   try {
