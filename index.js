@@ -24,26 +24,26 @@ app.use("/api", require("./routes/generate"));
 // app.use("/api/results", require("./routes/gameResults"));
 let sms = "opaopaoppapa";
 app.ws("/io", (ws, req) => {
-  ws.send(sms);
   ws.on("message", (msg) => {
     sms = msg;
+    ws.send(msg);
   });
 });
 
 // app.use("/api/auth", require("./routes/authRoutes"));
-app.ws("/", (ws, req) => {
-  ws.on("message", (msg) => {
-    msg = JSON.parse(msg);
-    switch (msg.method) {
-      case "connection":
-        connectionHandler(ws, msg);
-        break;
-      case "draw":
-        broadcastConnection(ws, msg);
-        break;
-    }
-  });
-});
+// app.ws("/", (ws, req) => {
+//   ws.on("message", (msg) => {
+//     msg = JSON.parse(msg);
+//     switch (msg.method) {
+//       case "connection":
+//         connectionHandler(ws, msg);
+//         break;
+//       case "draw":
+//         broadcastConnection(ws, msg);
+//         break;
+//     }
+//   });
+// });
 
 const PORT = 5000;
 async function start() {
