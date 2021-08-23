@@ -42,7 +42,7 @@ const connectionHandler = (ws, msg) => {
 
 const broadcastConnection = (ws, msg) => {
   aWss.clients.forEach((client) => {
-    client.send(JSON.stringify(msg));
+    client.send(msg);
   });
 };
 
