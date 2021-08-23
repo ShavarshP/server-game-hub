@@ -28,7 +28,23 @@ app.ws("/io", (ws, req) => {
   ws.on("message", (msg) => {
     sms = msg;
   });
+  ws.on("message", (msg) => {
+    msg = JSON.parse(msg);
+    connectionHandler(ws, msg);
+    broadcastConnection(ws, msg);
+  });
 });
+
+const connectionHandler = (ws, msg) => {
+  ws.id = msg.id;
+  broadcastConnection(ws, msg);
+};
+
+const broadcastConnection = (ws, msg) => {
+  aWss.clients.forEach((client) => {
+    client.send(JSON.stringify(msg));
+  });
+};
 
 // app.use("/api/auth", require("./routes/authRoutes"));
 // app.ws("/", (ws, req) => {
