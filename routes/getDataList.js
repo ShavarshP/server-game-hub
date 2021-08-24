@@ -1,6 +1,11 @@
 const { Router } = require("express");
 const { getArr } = require("../game_func/sudoku");
-const { playCards, cardsList } = require("../static/play_cards");
+const {
+  playCards,
+  cardsList,
+  fakeDate,
+  length,
+} = require("../static/play_cards");
 const router = Router();
 
 router.get("/participants", async (req, res) => {
@@ -50,6 +55,21 @@ router.get("/all_play_cards", async (req, res) => {
 router.get("/36_play_cards", async (req, res) => {
   try {
     res.json(cardsList.filter((item) => item.index > 5));
+  } catch (e) {
+    res.status(500).json({ message: "Something went wrong, please try again" });
+  }
+});
+
+router.get("/fakeDate_play_cards", async (req, res) => {
+  try {
+    res.json(fakeDate);
+  } catch (e) {
+    res.status(500).json({ message: "Something went wrong, please try again" });
+  }
+});
+router.get("/fakelength_play_cards", async (req, res) => {
+  try {
+    res.json(length);
   } catch (e) {
     res.status(500).json({ message: "Something went wrong, please try again" });
   }
