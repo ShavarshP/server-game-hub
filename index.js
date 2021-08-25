@@ -5,13 +5,14 @@ const mongoose = require("mongoose");
 const app = express();
 
 const server = require("http").Server(app);
+
+const cors = require("cors");
 const io = require("socket.io")(server, {
   cors: {
     origin: "*",
   },
 });
-
-const cors = require("cors");
+app.use(cors({ origin: "*" }));
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
@@ -22,7 +23,6 @@ app.use(
   })
 );
 
-app.use(cors({ origin: "*" }));
 app.use("/api", require("./routes/authRoutes"));
 app.use("/api", require("./routes/getDataList"));
 app.use("/api", require("./routes/login"));
