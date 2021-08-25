@@ -3,8 +3,10 @@ const config = require("config");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
-const WSServer = require("express-ws")(app);
-// const aWss = WSServer.getWss();
+
+const server = require("http").Server(app);
+const io = require("socket.io")(server);
+
 const cors = require("cors");
 
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -22,28 +24,8 @@ app.use("/api", require("./routes/getDataList"));
 app.use("/api", require("./routes/login"));
 app.use("/api", require("./routes/generate"));
 // app.use("/api/results", require("./routes/gameResults"));
-let sms = "opaopaoppapa";
-app.ws("/io", (ws, req) => {
-  ws.send(sms);
-  ws.on("message", (msg) => {
-    sms = msg;
-  });
-});
 
-// app.use("/api/auth", require("./routes/authRoutes"));
-// app.ws("/", (ws, req) => {
-//   ws.on("message", (msg) => {
-//     msg = JSON.parse(msg);
-//     switch (msg.method) {
-//       case "connection":
-//         connectionHandler(ws, msg);
-//         break;
-//       case "draw":
-//         broadcastConnection(ws, msg);
-//         break;
-//     }
-//   });
-// });
+io.on("connection", (client) => {});
 
 const PORT = 5000;
 async function start() {
@@ -53,7 +35,7 @@ async function start() {
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
-    app.listen(process.env.PORT || PORT, () =>
+    server.listen(process.env.PORT || PORT, () =>
       console.log(`App has been started on portt ${PORT}...`)
     );
   } catch (e) {
