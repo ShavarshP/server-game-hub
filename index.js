@@ -29,7 +29,19 @@ app.use("/api", require("./routes/login"));
 app.use("/api", require("./routes/generate"));
 // app.use("/api/results", require("./routes/gameResults"));
 
-io.on("connection", (client) => {});
+const rooms = {};
+io.on("connection", (socket) => {
+  socket.on("ROOM:JOIN", ({ roomId, userName }) => {
+    socket.join(roomId);
+    if (!rooms[roomId]) {
+      rooms[roomId] = [];
+    }
+    rooms[roomId] = [...rooms[roomId], socket.id];
+    // const users = [...rooms.get(roomId).get("users").values()];
+    const users = userName;
+    socket.to(roomId).broadcast.emit("ROOM:SET_USERS", users);
+  });
+});
 
 const PORT = 5000;
 async function start() {
