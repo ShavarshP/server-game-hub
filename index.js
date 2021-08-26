@@ -31,20 +31,27 @@ app.use("/api", require("./routes/login"));
 app.use("/api", require("./routes/generate"));
 // app.use("/api/results", require("./routes/gameResults"));
 
-const rooms = {};
+const rooms = new Map();
+
 io.on("connection", (socket) => {
   socket.on("ROOM:JOIN", ({ roomId, userName }) => {
-    socket.join(roomId);
-    if (!rooms[roomId]) {
-      rooms[roomId] = [];
+    if (!rooms.get(roomId) || !rooms.get(roomId).closed) {
+      socket.join(roomId);
+      if (!rooms.get(roomId)) {
+        rooms.set(roomId, { open: userName, closed: null });
+      } else {
+        rooms.set(roomId, { open: rooms.get(roomId).open, closed: userName });
+      }
+      socket.emit("ROOM:SET_USERS", "hi all");
+      socket.broadcast.to(roomId).emit("ROOM:SET_USERS", JSON.stringify(rooms));
+    } else {
+      socket.emit("ROOM:SET_USERS", "bum chaka-chaka");
     }
-    rooms[roomId] = [...rooms[roomId], socket.id];
+    // rooms[roomId] = [...rooms[roomId], socket.id];
     // const users = [...rooms.get(roomId).get("users").values()];
-    const users = userName;
+    // const users = userName;
     // socket.to(roomId).broadcast.emit("ROOM:SET_USERS", users);
     // socket.to(roomId).emit("ROOM:SET_USERS", users);
-    socket.emit("ROOM:SET_USERS", "hi all");
-    socket.broadcast.to(roomId).emit("ROOM:SET_USERS", "hi all");
   });
 });
 
