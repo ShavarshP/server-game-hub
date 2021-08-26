@@ -42,7 +42,8 @@ io.on("connection", (socket) => {
     // const users = [...rooms.get(roomId).get("users").values()];
     const users = userName;
     // socket.to(roomId).broadcast.emit("ROOM:SET_USERS", users);
-    socket.to(roomId).emit("ROOM:SET_USERS", users);
+    // socket.to(roomId).emit("ROOM:SET_USERS", users);
+    socket.broadcast.to(roomId).emit("ROOM:SET_USERS", "hi all");
   });
 });
 
