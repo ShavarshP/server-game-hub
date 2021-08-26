@@ -9,7 +9,7 @@ const server = require("http").Server(app);
 const cors = require("cors");
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000/",
+    origin: ["*"],
     methods: ["GET", "POST"],
   },
 });
