@@ -35,15 +35,20 @@ const rooms = new Map();
 
 io.on("connection", (socket) => {
   socket.on("ROOM:JOIN", ({ roomId, userName }) => {
-    if (!rooms.get(roomId) || !rooms.get(roomId).closed) {
+    if (!rooms.get(roomId) || rooms.get(roomId).closed === null) {
       socket.join(roomId);
       if (!rooms.get(roomId)) {
         rooms.set(roomId, { open: userName, closed: null });
       } else {
         rooms.set(roomId, { open: rooms.get(roomId).open, closed: userName });
-        socket.emit("ROOM:SET_USERS", JSON.stringify(rooms));
+        socket.emit(
+          "ROOM:SET_USERS",
+          JSON.stringify({ open: rooms.get(roomId).open, closed: userName })
+        );
       }
-      socket.broadcast.to(roomId).emit("ROOM:SET_USERS", JSON.stringify(rooms));
+      socket.broadcast
+        .to(roomId)
+        .emit("ROOM:SET_USERS", "JSON.stringify(rooms)");
     } else {
       socket.emit("ROOM:SET_USERS", "bum chaka-chaka");
     }
