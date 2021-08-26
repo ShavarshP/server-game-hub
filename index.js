@@ -41,8 +41,8 @@ io.on("connection", (socket) => {
         rooms.set(roomId, { open: userName, closed: null });
       } else {
         rooms.set(roomId, { open: rooms.get(roomId).open, closed: userName });
+        socket.emit("ROOM:SET_USERS", JSON.stringify(rooms));
       }
-      socket.emit("ROOM:SET_USERS", "hi all");
       socket.broadcast.to(roomId).emit("ROOM:SET_USERS", JSON.stringify(rooms));
     } else {
       socket.emit("ROOM:SET_USERS", "bum chaka-chaka");
