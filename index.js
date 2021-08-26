@@ -10,9 +10,6 @@ const cors = require("cors");
 const io = require("socket.io")(server, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["my-custom-header"],
-    credentials: true,
   },
 });
 app.use(cors({ origin: "*" }));
