@@ -15,7 +15,7 @@ const getio = (io) => {
   const rooms = new Map();
   // console.log("maladec");
   io.on("connection", (socket) => {
-    // cardArr = cardsList.filter((item) => item.index > 4);
+    cardArr = cardsList.filter((item) => item.index > 4);
     socket.on("ROOM:JOIN", ({ roomId, userName }) => {
       try {
         if (!rooms.get(roomId) || rooms.get(roomId).closed === null) {
