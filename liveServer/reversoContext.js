@@ -1,14 +1,15 @@
 const { cardsList } = require("../static/play_cards");
 
-let cardArr = cardsList.filter((item) => item.index > 5);
+let cardArr;
 
 const getRandomCard = (index, acc = []) => {
   if (index === 0 || cardArr == []) {
     return acc;
   }
-  const random = Math.floor(Math.random() * 36);
+  const random = Math.floor(Math.random() * cardArr.length);
   acc = [...acc, cardArr[random]];
   cardArr = cardArr.filter((item, index) => index !== random);
+  console.log(cardArr.length);
   return getRandomCard(index - 1, acc);
 };
 const getio = (io) => {
@@ -21,6 +22,7 @@ const getio = (io) => {
           socket.join(roomId);
           if (!rooms.get(roomId)) {
             rooms.set(roomId, {
+              // cardArr = cardsList.filter((item) => item.index > 5)
               open: { userName: userName, myCard: getRandomCard(6) },
               closed: null,
             });
