@@ -51,11 +51,12 @@ const getio = (io) => {
     });
 
     socket.on("TABLE:DATA", ({ roomId, tableData }) => {
+      socket.join(roomId);
       rooms.set(roomId, {
         ...rest,
         tableData: tableData,
       });
-      socket.emit("TABLE:DATA", JSON.stringify(rooms.get(roomId).tableData));
+      socket.emit("TABLE:DATA", "JSON.stringify(rooms.get(roomId).tableData)");
     });
   });
 };
