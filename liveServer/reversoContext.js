@@ -49,14 +49,13 @@ const getio = (io) => {
         socket.emit("ROOM:SET_USERS", "bum chaka-chaka");
       }
     });
-
+    const table = {};
     socket.on("TABLE:DATA", ({ roomId, tableData }) => {
-      rooms.set(roomId, {
-        open: rooms.get(roomId).open,
-        closed: rooms.get(roomId).closed,
-        tableData: tableData,
-      });
-      socket.emit("TABLE:DATA", JSON.stringify(rooms.get(roomId)));
+      table[roomId] = { data: tableData };
+      socket.emit(
+        "TABLE:DATA",
+        table.roomId ? JSON.stringify(table.roomId) : "chkpav"
+      );
       // socket.broadcast
       //   .to(roomId)
       //   .emit("ROOM:SET_USERS", rooms.get(roomId).tableData);
