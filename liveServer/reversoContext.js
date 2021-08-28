@@ -56,7 +56,7 @@ const getio = (io) => {
         closed: rooms.get(roomId).closed,
         tableData: tableData,
       });
-      socket.emit("TABLE:DATA", rooms.get(roomId).tableData);
+      socket.emit("TABLE:DATA", JSON.stringify(rooms.get(roomId)));
       // socket.broadcast
       //   .to(roomId)
       //   .emit("ROOM:SET_USERS", rooms.get(roomId).tableData);
