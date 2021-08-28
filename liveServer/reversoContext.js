@@ -57,9 +57,9 @@ const getio = (io) => {
         tableData: tableData,
       });
       socket.emit("TABLE:DATA", rooms.get(roomId).tableData);
-      socket.broadcast
-        .to(roomId)
-        .emit("ROOM:SET_USERS", rooms.get(roomId).tableData);
+      // socket.broadcast
+      //   .to(roomId)
+      //   .emit("ROOM:SET_USERS", rooms.get(roomId).tableData);
     });
   });
 };
