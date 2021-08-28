@@ -51,14 +51,17 @@ const getio = (io) => {
     });
     const table = {};
     socket.on("TABLE:DATA", ({ roomId, tableData }) => {
-      table[roomId] = { data: tableData };
+      table.roomId = { data: tableData };
       socket.emit(
         "TABLE:DATA",
-        table.roomId ? JSON.stringify(table.roomId) : "chkpav"
+        table.roomId ? JSON.stringify(table.roomId) : roomId
       );
-      // socket.broadcast
-      //   .to(roomId)
-      //   .emit("ROOM:SET_USERS", rooms.get(roomId).tableData);
+      socket.broadcast
+        .to(roomId)
+        .emit(
+          "ROOM:SET_USERS",
+          table.roomId ? JSON.stringify(table.roomId) : roomId
+        );
     });
   });
 };
