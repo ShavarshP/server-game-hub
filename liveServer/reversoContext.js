@@ -51,11 +51,15 @@ const getio = (io) => {
     });
 
     socket.on("TABLE:DATA", ({ roomId, tableData }) => {
-      // rooms.set(roomId, {
-      //   ...rest,
-      //   tableData: tableData,
-      // });
-      socket.emit("TABLE:DATA", tableData);
+      rooms.set(roomId, {
+        open: rooms.get(roomId).open,
+        closed: rooms.get(roomId).closed,
+        tableData: tableData,
+      });
+      socket.emit("TABLE:DATA", rooms.get(roomId).tableData);
+      socket.broadcast
+        .to(roomId)
+        .emit("ROOM:SET_USERS", rooms.get(roomId).tableData);
     });
   });
 };
