@@ -52,13 +52,10 @@ const getio = (io) => {
     const table = {};
     socket.on("TABLE:DATA", ({ roomId, tableData }) => {
       table.roomId = { data: JSON.parse(tableData) };
-      socket.emit(
-        "TABLE:DATA",
-        table.roomId ? JSON.stringify(table.roomId) : roomId
-      );
-      socket.broadcast
+
+      socket
         .to(roomId)
-        .emit(
+        .broadcast.emit(
           "TABLE:DATA",
           table.roomId ? JSON.stringify(table.roomId) : roomId
         );
