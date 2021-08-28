@@ -49,28 +49,27 @@ const getio = (io) => {
           socket.broadcast
             .to(roomId)
             .emit("ROOM:SET_USERS", JSON.stringify(rooms.get(roomId).closed));
-
-          socket.on("TABLE:DATA", ({ tableData }) => {
-            rooms.set(roomId, {
-              ...rest,
-              tableData: tableData,
-            });
-            socket.emit(
-              "ROOM:SET_TABLE_DATA",
-              JSON.stringify(rooms.get(roomId).tableData)
-            );
-
-            socket.broadcast
-              .to(roomId)
-              .emit(
-                "ROOM:SET_TABLE_DATA",
-                JSON.stringify(rooms.get(roomId).tableData)
-              );
-          });
         } else {
           socket.emit("ROOM:SET_USERS", "bum chaka-chaka");
         }
       } catch (error) {}
+    });
+    socket.on("TABLE:DATA", ({ roomId, tableData }) => {
+      rooms.set(roomId, {
+        ...rest,
+        tableData: tableData,
+      });
+      socket.emit(
+        "ROOM:SET_TABLE_DATA",
+        JSON.stringify(rooms.get(roomId).tableData)
+      );
+
+      socket.broadcast
+        .to(roomId)
+        .emit(
+          "ROOM:SET_TABLE_DATA",
+          JSON.stringify(rooms.get(roomId).tableData)
+        );
     });
   });
 };
