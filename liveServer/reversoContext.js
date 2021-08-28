@@ -17,59 +17,45 @@ const getio = (io) => {
   io.on("connection", (socket) => {
     cardArr = cardsList.filter((item) => item.index > 4);
     socket.on("ROOM:JOIN", ({ roomId, userName }) => {
-      try {
-        if (!rooms.get(roomId) || rooms.get(roomId).closed === null) {
-          socket.join(roomId);
-          if (!rooms.get(roomId)) {
-            rooms.set(roomId, {
-              open: {
-                userName: userName,
-                myCard: getRandomCard(6),
-                primary: true,
-              },
-              closed: null,
-              tableData: null,
-            });
-          } else {
-            rooms.set(roomId, {
-              open: rooms.get(roomId).open,
-              closed: {
-                userName: userName,
-                myCard: getRandomCard(6),
-                primer: false,
-              },
-              tableData: null,
-            });
-
-            socket.emit(
-              "ROOM:SET_USERS",
-              JSON.stringify(rooms.get(roomId).open)
-            );
-          }
-          socket.broadcast
-            .to(roomId)
-            .emit("ROOM:SET_USERS", JSON.stringify(rooms.get(roomId).closed));
+      if (!rooms.get(roomId) || rooms.get(roomId).closed === null) {
+        socket.join(roomId);
+        if (!rooms.get(roomId)) {
+          rooms.set(roomId, {
+            open: {
+              userName: userName,
+              myCard: getRandomCard(6),
+              primary: true,
+            },
+            closed: null,
+            tableData: null,
+          });
         } else {
-          socket.emit("ROOM:SET_USERS", "bum chaka-chaka");
+          rooms.set(roomId, {
+            open: rooms.get(roomId).open,
+            closed: {
+              userName: userName,
+              myCard: getRandomCard(6),
+              primer: false,
+            },
+            tableData: null,
+          });
+
+          socket.emit("ROOM:SET_USERS", JSON.stringify(rooms.get(roomId).open));
         }
-      } catch (error) {}
+        socket.broadcast
+          .to(roomId)
+          .emit("ROOM:SET_USERS", JSON.stringify(rooms.get(roomId).closed));
+      } else {
+        socket.emit("ROOM:SET_USERS", "bum chaka-chaka");
+      }
     });
+
     socket.on("TABLE:DATA", ({ roomId, tableData }) => {
       rooms.set(roomId, {
         ...rest,
         tableData: tableData,
       });
-      socket.emit(
-        "ROOM:SET_TABLE_DATA",
-        JSON.stringify(rooms.get(roomId).tableData)
-      );
-
-      socket.broadcast
-        .to(roomId)
-        .emit(
-          "ROOM:SET_TABLE_DATA",
-          JSON.stringify(rooms.get(roomId).tableData)
-        );
+      socket.emit("TABLE:DATA", JSON.stringify(rooms.get(roomId).tableData));
     });
   });
 };
