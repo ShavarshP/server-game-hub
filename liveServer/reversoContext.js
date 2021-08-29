@@ -35,7 +35,7 @@ const getio = (io) => {
             closed: {
               userName: userName,
               myCard: getRandomCard(6),
-              primery: false,
+              primary: false,
             },
             tableData: null,
           });
