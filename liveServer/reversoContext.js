@@ -69,15 +69,17 @@ const getio = (io) => {
     socket.on("RECEIVE:CARDS", ({ roomId, amount }) => {
       socket.join(roomId);
       cardsData.roomId = getRandomCard(JSON.parse(amount).index);
-      socket.emit(
-        "RECEIVE:CARDS",
-        table.roomId
-          ? JSON.stringify([
-              ...JSON.parse(amount).cardData,
-              ...cardsData.roomId,
-            ])
-          : roomId
-      );
+      const data = JSON.stringify([
+        ...JSON.parse(amount).cardData,
+        ...cardsData.roomId,
+      ]);
+      socket.emit("RECEIVE:CARDS", table.roomId ? data : roomId);
+      socket.broadcast
+        .to(roomId)
+        .emit(
+          "RECEIVE:CARDS_LENGTH",
+          table.roomId ? JSON.parse(data).length : roomId
+        );
     });
   });
 };
