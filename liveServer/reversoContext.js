@@ -71,7 +71,12 @@ const getio = (io) => {
       cardsData.roomId = getRandomCard(JSON.parse(amount).index);
       socket.emit(
         "RECEIVE:CARDS",
-        table.roomId ? JSON.stringify(cardsData.roomId) : roomId
+        table.roomId
+          ? JSON.stringify([
+              ...JSON.parse(amount).cardData,
+              ...cardsData.roomId,
+            ])
+          : roomId
       );
     });
   });
