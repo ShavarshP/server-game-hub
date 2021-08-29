@@ -64,6 +64,16 @@ const getio = (io) => {
           table.roomId ? JSON.stringify(table.roomId) : roomId
         );
     });
+    const cardsData = {};
+
+    socket.on("RECEIVE:CARDS", ({ roomId, amount }) => {
+      socket.join(roomId);
+      cardsData.roomId = getRandomCard(JSON.parse(amount).index);
+      socket.emit(
+        "RECEIVE:CARDS",
+        table.roomId ? JSON.stringify(cardsData.roomId) : roomId
+      );
+    });
   });
 };
 module.exports = getio;
