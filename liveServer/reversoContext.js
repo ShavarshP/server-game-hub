@@ -13,7 +13,7 @@ const getRandomCard = (index, acc = []) => {
 };
 const getio = (io) => {
   const rooms = new Map();
-  // console.log("maladec");
+  // console.log("maladec")
   io.on("connection", (socket) => {
     cardArr = cardsList.filter((item) => item.index > 4);
     const randomCard = getRandomCard(1);
