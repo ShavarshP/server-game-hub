@@ -1,32 +1,45 @@
 const { cardsList } = require("../static/play_cards");
 
-let cardArr = cardsList.filter((item) => item.index > 4);
+// let cardArr = cardsList.filter((item) => item.index > 4);
 
-const getRandomCard = (index, acc = []) => {
-  if (index === 0 || cardArr == []) {
-    return acc;
+const getRandomCard = (arr, index, acc = []) => {
+  if (index === 0 || arr.length === 0) {
+    return [arr, acc];
   }
-  const random = Math.floor(Math.random() * cardArr.length);
-  acc = [...acc, cardArr[random]];
-  cardArr = cardArr.filter((item, index) => index !== random);
-  return getRandomCard(index - 1, acc);
+  const random = Math.floor(Math.random() * arr.length);
+  acc = [...acc, arr[random]];
+  arr = arr.filter((item, index) => index !== random);
+  return getRandomCard(arr, index - 1, acc);
 };
 const getio = (io) => {
   const rooms = new Map();
   // console.log("maladec")
   io.on("connection", (socket) => {
-    cardArr = cardsList.filter((item) => item.index > 4);
-    const randomCard = getRandomCard(1);
+    // cardArr = cardsList.filter((item) => item.index > 4);
+    const cartData = {};
+    const getNewCards = (id, index) => {
+      let arr;
+      [cartData[id], arr] = getRandomCard(cartData[id], index);
+      return arr;
+    };
     socket.on("ROOM:JOIN", ({ roomId, userName }) => {
+      cartData.roomId = cartData.roomId
+        ? cartData.roomId
+        : cardsList.filter((item) => item.index > 4);
+
       if (!rooms.get(roomId) || rooms.get(roomId).closed === null) {
+        const randomCard = getNewCards(roomId, 1);
+        // (cards = rooms.get(roomId).cards
+        //   ? rooms.get(roomId).cards
+        //   : cardsList.filter((item) => item.index > 4)),
         socket.join(roomId);
         if (!rooms.get(roomId)) {
           rooms.set(roomId, {
             open: {
               userName: userName,
-              myCard: getRandomCard(6),
+              myCard: getNewCards(roomId, 6),
               primary: true,
-              random: randomCard,
+              random: randomCard[0],
             },
             closed: null,
             tableData: null,
@@ -36,9 +49,9 @@ const getio = (io) => {
             open: rooms.get(roomId).open,
             closed: {
               userName: userName,
-              myCard: getRandomCard(6),
+              myCard: getNewCards(roomId, 6),
               primary: false,
-              random: rooms.get(roomId).open.randomCard,
+              random: rooms.get(roomId).open.random[0],
             },
             tableData: null,
           });
@@ -77,7 +90,7 @@ const getio = (io) => {
 
     socket.on("RECEIVE:CARDS", ({ roomId, amount }) => {
       socket.join(roomId);
-      cardsData.roomId = getRandomCard(JSON.parse(amount).index);
+      cardsData.roomId = getRandomCard(roomId, JSON.parse(amount).index);
       const data = JSON.stringify([
         ...JSON.parse(amount).cardData,
         ...cardsData.roomId,
