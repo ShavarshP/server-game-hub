@@ -57,10 +57,10 @@ const getio = (io) => {
       socket.join(roomId);
       table.roomId = {
         data: JSON.parse(tableData),
-        index: [
-          rooms.get(roomId).closed.myCard.length,
-          rooms.get(roomId).open.myCard.length,
-        ],
+        // index: [
+        //   rooms.get(roomId).closed.myCard.length,
+        //   rooms.get(roomId).open.myCard.length,
+        // ],
       };
       socket.emit(
         "TABLE:DATA",
