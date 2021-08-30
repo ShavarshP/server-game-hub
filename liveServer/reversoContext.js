@@ -16,7 +16,7 @@ const getio = (io) => {
       allCards.set(id, newArr);
       return getRandomCard(index - 1, acc, id);
     } catch (error) {
-      return { data: "shash" };
+      return { data: error };
     }
   };
   // console.log("maladec")
@@ -83,13 +83,12 @@ const getio = (io) => {
     const cardsData = {};
 
     socket.on("RECEIVE:CARDS", ({ roomId, amount }) => {
-      socket.join(roomId);
-      cardsData.roomId = getRandomCard(JSON.parse(amount).index, [], roomId);
-      const data = JSON.stringify([
-        ...JSON.parse(amount).cardData,
-        ...cardsData.roomId,
-      ]);
-      socket.emit("RECEIVE:CARDS", table.roomId ? data : roomId);
+      try {
+        socket.join(roomId);
+        cardsData.roomId = getRandomCard(JSON.parse(amount).index, [], roomId);
+        const data = JSON.stringify(cardsData.roomId);
+        socket.emit("RECEIVE:CARDS", table.roomId ? data : roomId);
+      } catch (error) {}
       // socket.broadcast
       //   .to(roomId)
       //   .emit(
