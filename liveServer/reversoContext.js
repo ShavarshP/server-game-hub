@@ -38,7 +38,7 @@ const getio = (io) => {
               userName: userName,
               myCard: getRandomCard(6),
               primary: false,
-              random: randomCard,
+              random: rooms.get(roomId).open.randomCard,
             },
             tableData: null,
           });
