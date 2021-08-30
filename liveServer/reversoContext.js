@@ -16,6 +16,7 @@ const getio = (io) => {
   // console.log("maladec");
   io.on("connection", (socket) => {
     cardArr = cardsList.filter((item) => item.index > 4);
+    const randomCard = getRandomCard(1);
     socket.on("ROOM:JOIN", ({ roomId, userName }) => {
       if (!rooms.get(roomId) || rooms.get(roomId).closed === null) {
         socket.join(roomId);
@@ -25,6 +26,7 @@ const getio = (io) => {
               userName: userName,
               myCard: getRandomCard(6),
               primary: true,
+              random: randomCard,
             },
             closed: null,
             tableData: null,
@@ -36,6 +38,7 @@ const getio = (io) => {
               userName: userName,
               myCard: getRandomCard(6),
               primary: false,
+              random: randomCard,
             },
             tableData: null,
           });
@@ -52,7 +55,13 @@ const getio = (io) => {
     const table = {};
     socket.on("TABLE:DATA", ({ roomId, tableData }) => {
       socket.join(roomId);
-      table.roomId = { data: JSON.parse(tableData) };
+      table.roomId = {
+        data: JSON.parse(tableData),
+        index: [
+          rooms.get(roomId).closed.myCard.length,
+          rooms.get(roomId).open.myCard.length,
+        ],
+      };
       socket.emit(
         "TABLE:DATA",
         table.roomId ? JSON.stringify(table.roomId) : roomId
@@ -74,12 +83,12 @@ const getio = (io) => {
         ...cardsData.roomId,
       ]);
       socket.emit("RECEIVE:CARDS", table.roomId ? data : roomId);
-      socket.broadcast
-        .to(roomId)
-        .emit(
-          "RECEIVE:CARDS_LENGTH",
-          table.roomId ? JSON.parse(data).length : roomId
-        );
+      // socket.broadcast
+      //   .to(roomId)
+      //   .emit(
+      //     "RECEIVE:CARDS_LENGTH",
+      //     table.roomId ? JSON.parse(data).length : roomId
+      //   );
     });
   });
 };
