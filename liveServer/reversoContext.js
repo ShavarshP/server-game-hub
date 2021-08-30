@@ -27,6 +27,7 @@ const getio = (io) => {
         socket.join(roomId);
         if (!rooms.get(roomId)) {
           allCards.set(roomId, cardArr);
+
           const randomCard = getRandomCard(1, [], roomId);
           rooms.set(roomId, {
             open: {
@@ -86,7 +87,10 @@ const getio = (io) => {
       try {
         socket.join(roomId);
         cardsData.roomId = getRandomCard(JSON.parse(amount).index, [], roomId);
-        const data = JSON.stringify(cardsData.roomId);
+        const data = JSON.stringify([
+          ...JSON.parse(amount).cardData,
+          ...cardsData.roomId,
+        ]);
         socket.emit("RECEIVE:CARDS", table.roomId ? data : roomId);
       } catch (error) {}
       // socket.broadcast

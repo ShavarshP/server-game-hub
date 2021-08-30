@@ -8,6 +8,7 @@ const server = require("http").Server(app);
 
 const cors = require("cors");
 const getio = require("./liveServer/reversoContext");
+const chessIo = require("./liveServer/chess");
 const io = require("socket.io")(server, {
   cors: {
     origin: "*",
@@ -31,6 +32,7 @@ app.use("/api", require("./routes/getDataList"));
 app.use("/api", require("./routes/login"));
 app.use("/api", require("./routes/generate"));
 getio(io);
+chessIo(io);
 // app.use("/api/results", require("./routes/gameResults"));
 
 const PORT = 5000;
