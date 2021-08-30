@@ -38,20 +38,22 @@ const chessIo = (io) => {
     });
     const table = {};
     socket.on("TABLE:DATA_CHESS", ({ roomId, tableData }) => {
-      socket.join(roomId);
-      table.roomId = {
-        data: JSON.parse(tableData),
-      };
-      socket.emit(
-        "TABLE:DATA_CHESS",
-        table.roomId ? JSON.stringify(table.roomId) : roomId
-      );
-      socket.broadcast
-        .to(roomId)
-        .emit(
+      try {
+        socket.join(roomId);
+        table.roomId = {
+          data: JSON.parse(tableData),
+        };
+        socket.emit(
           "TABLE:DATA_CHESS",
           table.roomId ? JSON.stringify(table.roomId) : roomId
         );
+        socket.broadcast
+          .to(roomId)
+          .emit(
+            "TABLE:DATA_CHESS",
+            table.roomId ? JSON.stringify(table.roomId) : roomId
+          );
+      } catch (error) {}
     });
   });
 };

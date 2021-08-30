@@ -4,29 +4,29 @@ let cardArr = cardsList.filter((item) => item.index > 4);
 
 const getio = (io) => {
   const rooms = new Map();
-  const allCards = new Map();
-  const getRandomCard = (index, acc = [], id) => {
+
+  const getRandomCard = async (index, acc = [], id) => {
     try {
-      if (index === 0 || allCards.get(id) == []) {
+      const allCards = await JSON.parse(readFile(id));
+      if (index === 0 || allCards == []) {
         return acc;
       }
-      const random = Math.floor(Math.random() * allCards.get(id).length);
-      acc = [...acc, allCards.get(id)[random]];
-      const newArr = allCards.get(id).filter((item, index) => index !== random);
-      allCards.set(id, newArr);
+      const random = Math.floor(Math.random() * allCards.length);
+      acc = [...acc, allCards[random]];
+      const newArr = allCards.filter((item, index) => index !== random);
+      await writeFile(id, newArr);
       return getRandomCard(index - 1, acc, id);
     } catch (error) {
       return { data: error };
     }
   };
-  // console.log("maladec")
   io.on("connection", (socket) => {
     cardArr = cardsList.filter((item) => item.index > 4);
     socket.on("ROOM:JOIN", ({ roomId, userName }) => {
       if (!rooms.get(roomId) || rooms.get(roomId).closed === null) {
         socket.join(roomId);
         if (!rooms.get(roomId)) {
-          allCards.set(roomId, cardArr);
+          writeFile(roomId, cardArr);
 
           const randomCard = getRandomCard(1, [], roomId);
           rooms.set(roomId, {
