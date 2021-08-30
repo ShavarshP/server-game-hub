@@ -6,14 +6,18 @@ const getio = (io) => {
   const rooms = new Map();
   const allCards = new Map();
   const getRandomCard = (index, acc = [], id) => {
-    if (index === 0 || cardArr == []) {
-      return acc;
+    try {
+      if (index === 0 || allCards.get(id) == []) {
+        return acc;
+      }
+      const random = Math.floor(Math.random() * allCards.get(id).length);
+      acc = [...acc, allCards.get(id)[random]];
+      const newArr = allCards.get(id).filter((item, index) => index !== random);
+      allCards.set(id, newArr);
+      return getRandomCard(index - 1, acc, id);
+    } catch (error) {
+      return { data: "shash" };
     }
-    const random = Math.floor(Math.random() * allCards.get(id).length);
-    acc = [...acc, allCards.get(id)[random]];
-    const newArr = allCards.get(id).filter((item, index) => index !== random);
-    allCards.set(id, newArr);
-    return getRandomCard(index - 1, acc, id);
   };
   // console.log("maladec")
   io.on("connection", (socket) => {
