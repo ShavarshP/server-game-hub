@@ -16,16 +16,18 @@ const getio = (io) => {
   // console.log("maladec")
   io.on("connection", (socket) => {
     // cardArr = cardsList.filter((item) => item.index > 4);
-    const cartData = {};
-    const getNewCards = (id, index) => {
-      let arr;
-      [cartData[id], arr] = getRandomCard(cartData[id], index);
-      return arr;
+    const cartData = new Map();
+    const getNewCards = ({ id, index }) => {
+      let [arr1, arr2] = getRandomCard(cartData.get(id), index);
+      cartData.set(arr1);
+      return arr2;
     };
     socket.on("ROOM:JOIN", ({ roomId, userName }) => {
-      cartData.roomId = cartData.roomId
-        ? cartData.roomId
-        : cardsList.filter((item) => item.index > 4);
+      cartData.set(
+        cartData.get(roomId)
+          ? cartData.get(roomId)
+          : cardsList.filter((item) => item.index > 4)
+      );
 
       if (!rooms.get(roomId) || rooms.get(roomId).closed === null) {
         const randomCard = getNewCards(roomId, 1);
