@@ -97,10 +97,13 @@ const getio = (io) => {
         const cardsData = getRandomCard(JSON.parse(amount).index, [], cards);
 
         cards = newArrCards(cardsData, cards);
-        const data = JSON.stringify(cardsData);
+        const data = JSON.stringify({
+          myCard: [...JSON.parse(amount).cardData, ...cardsData],
+          allCards: cards,
+        });
         socket.emit("RECEIVE:CARDS", table.roomId ? data : roomId);
       } catch (error) {
-        socket.emit("RECEIVE:CARDS", table.roomId ? allCards : roomId);
+        socket.emit("RECEIVE:CARDS", roomId);
       }
       // socket.broadcast
       //   .to(roomId)
