@@ -92,7 +92,7 @@ const getio = (io) => {
 
     socket.on("RECEIVE:CARDS", ({ roomId, amount, allCards }) => {
       try {
-        let cards = JSON.parse(allCards);
+        let cards = JSON.parse(allCards).cardData;
         socket.join(roomId);
         cardsData.roomId = getRandomCard(JSON.parse(amount).index, [], cards);
 
