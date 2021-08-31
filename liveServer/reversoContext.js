@@ -1,4 +1,4 @@
-const { getRandomCard } = require("../game_func/reversContext");
+const { getRandomCard, newArrCards } = require("../game_func/reversContext");
 const { cardsList } = require("../static/play_cards");
 
 let cardArr = cardsList.filter((item) => item.index > 4);
@@ -27,22 +27,39 @@ const getio = (io) => {
             tableData: null,
           });
         } else {
+          let newArrCardsData = newArrCards(
+            rooms.get(roomId).open.myCard,
+            allCards.get(roomId)
+          );
+          let myCard = getRandomCard(6, [], newArrCardsData);
+          newArrCardsData = newArrCards(myCard, newArrCardsData);
           rooms.set(roomId, {
             open: rooms.get(roomId).open,
             closed: {
               userName: userName,
-              myCard: getRandomCard(6, [], allCards.get(roomId)),
+              myCard: myCard,
               primary: false,
               random: rooms.get(roomId).open.random,
             },
             tableData: null,
+            allCards: newArrCardsData,
           });
 
           socket.emit("ROOM:SET_USERS", JSON.stringify(rooms.get(roomId).open));
+          socket.emit(
+            "ROOM:SET_USERS_CARDS",
+            JSON.stringify(rooms.get(roomId).allCards)
+          );
         }
         socket.broadcast
           .to(roomId)
           .emit("ROOM:SET_USERS", JSON.stringify(rooms.get(roomId).closed));
+        socket.broadcast
+          .to(roomId)
+          .emit(
+            "ROOM:SET_USERS_CARDS",
+            JSON.stringify(rooms.get(roomId).allCards)
+          );
       } else {
         socket.emit("ROOM:SET_USERS", "bum chaka-chaka");
       }
