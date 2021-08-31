@@ -88,18 +88,20 @@ const getio = (io) => {
           table.roomId ? JSON.stringify(table.roomId) : roomId
         );
     });
-    const cardsData = {};
+    // const cardsData = {};
 
     socket.on("RECEIVE:CARDS", ({ roomId, amount, allCards }) => {
       try {
-        let cards = JSON.parse(allCards).cardData;
         socket.join(roomId);
-        cardsData.roomId = getRandomCard(JSON.parse(amount).index, [], cards);
+        let cards = JSON.parse(allCards).cardData;
+        const cardsData = getRandomCard(JSON.parse(amount).index, [], cards);
 
-        cards = newArrCards(cardsData.roomId, cards);
-        const data = JSON.stringify(cards);
+        cards = newArrCards(cardsData, cards);
+        const data = JSON.stringify(cardsData);
         socket.emit("RECEIVE:CARDS", table.roomId ? data : roomId);
-      } catch (error) {}
+      } catch (error) {
+        socket.emit("RECEIVE:CARDS", table.roomId ? allCards : roomId);
+      }
       // socket.broadcast
       //   .to(roomId)
       //   .emit(
