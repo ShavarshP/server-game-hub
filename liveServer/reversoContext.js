@@ -85,6 +85,9 @@ const getio = (io) => {
 
     socket.on("RECEIVE:CARDS", ({ roomId, amount }) => {
       try {
+        if (!rooms.get(roomId)) {
+          allCards.set(roomId, cardArr);
+        }
         socket.join(roomId);
         cardsData.roomId = getRandomCard(JSON.parse(amount).index, [], roomId);
         const data = JSON.stringify([
