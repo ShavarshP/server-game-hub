@@ -1,7 +1,7 @@
 const newArrCards = (myCard, allCards) => {
   try {
-    const newArr = allCards.filter((item) =>
-      myCard.some((item2) => item.name == item2.name)
+    const newArr = allCards.filter(
+      (item) => !myCard.some((item2) => item.name == item2.name)
     );
 
     return newArr;
