@@ -118,7 +118,7 @@ const getio = (io) => {
         socket.join(roomId);
 
         // socket.emit("NUMBER_OF_CARDS", allCards);
-        socket.emit("NUMBER_OF_CARDS", allCards);
+        // socket.emit("NUMBER_OF_CARDS", allCards);
         socket.broadcast.to(roomId).emit("NUMBER_OF_CARDS", allCards);
       } catch (error) {
         socket.emit("RECEIVE:CARDS", roomId);
