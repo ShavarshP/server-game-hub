@@ -1,3 +1,4 @@
+const { getRandomCard } = require("../game_func/reversContext");
 const { cardsList } = require("../static/play_cards");
 
 let cardArr = cardsList.filter((item) => item.index > 4);
@@ -5,20 +6,6 @@ let cardArr = cardsList.filter((item) => item.index > 4);
 const getio = (io) => {
   const rooms = new Map();
   const allCards = new Map();
-  const getRandomCard = (index, acc = [], id) => {
-    try {
-      if (index === 0 || allCards.get(id) == []) {
-        return acc;
-      }
-      const random = Math.floor(Math.random() * allCards.get(id).length);
-      acc = [...acc, allCards.get(id)[random]];
-      const newArr = allCards.get(id).filter((item, index) => index !== random);
-      allCards.set(id, newArr);
-      return getRandomCard(index - 1, acc, id);
-    } catch (error) {
-      return { data: error };
-    }
-  };
 
   io.on("connection", (socket) => {
     cardArr = cardsList.filter((item) => item.index > 4);
@@ -28,11 +15,11 @@ const getio = (io) => {
         if (!rooms.get(roomId)) {
           allCards.set(roomId, cardArr);
 
-          const randomCard = getRandomCard(1, [], roomId);
+          const randomCard = getRandomCard(1, [], cardArr);
           rooms.set(roomId, {
             open: {
               userName: userName,
-              myCard: getRandomCard(6, [], roomId),
+              myCard: getRandomCard(6, [], cardArr),
               primary: true,
               random: randomCard[0],
             },
@@ -44,7 +31,7 @@ const getio = (io) => {
             open: rooms.get(roomId).open,
             closed: {
               userName: userName,
-              myCard: getRandomCard(6, [], roomId),
+              myCard: getRandomCard(6, [], cardArr),
               primary: false,
               random: rooms.get(roomId).open.random,
             },
@@ -89,7 +76,7 @@ const getio = (io) => {
           allCards.set(roomId, cardArr);
         }
         socket.join(roomId);
-        cardsData.roomId = getRandomCard(JSON.parse(amount).index, [], roomId);
+        cardsData.roomId = getRandomCard(JSON.parse(amount).index, [], cardArr);
         const data = JSON.stringify([
           ...JSON.parse(amount).cardData,
           ...cardsData.roomId,
