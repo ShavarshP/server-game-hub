@@ -106,15 +106,12 @@ const getio = (io) => {
         socket.emit("RECEIVE:CARDS", roomId);
       }
     });
-    // socket.on("NUMBER_CARDS", ({ roomId, allCards }) => {
-    //   try {
-    //     socket.join(roomId);
-
-    //     // socket.emit("NUMBER_OF_CARDS", allCards);
-    //     // socket.emit("NUMBER_OF_CARDS", allCards);
-    //     socket.broadcast.to(roomId).emit("NUMBER_CARDS", allCards);
-    //   } catch (error) {}
-    // });
+    socket.on("NUMBER_CARDS", ({ roomId, allCards }) => {
+      try {
+        socket.join(roomId);
+        socket.broadcast.to(roomId).emit("NUMBER_CARDS", allCards);
+      } catch (error) {}
+    });
   });
 };
 module.exports = getio;
