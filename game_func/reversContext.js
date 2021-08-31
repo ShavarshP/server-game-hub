@@ -15,7 +15,7 @@ const getRandomCard = (index, acc = [], allCards) => {
     if (index === 0 || allCards == []) {
       return acc;
     }
-    const random = Math.floor(Math.random() * allCards.get(id).length);
+    const random = Math.floor(Math.random() * allCards.length);
     acc = [...acc, allCards[random]];
     const newArr = allCards.filter((item, index) => index !== random);
 

@@ -19,7 +19,7 @@ const getio = (io) => {
           rooms.set(roomId, {
             open: {
               userName: userName,
-              myCard: allCards.get(roomId),
+              myCard: getRandomCard(6, [], allCards.get(roomId)),
               primary: true,
               random: randomCard[0],
             },
@@ -31,7 +31,7 @@ const getio = (io) => {
             open: rooms.get(roomId).open,
             closed: {
               userName: userName,
-              myCard: allCards.get(roomId),
+              myCard: getRandomCard(6, [], allCards.get(roomId)),
               primary: false,
               random: rooms.get(roomId).open.random,
             },
