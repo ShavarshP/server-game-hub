@@ -21,7 +21,7 @@ const getio = (io) => {
               userName: userName,
               myCard: getRandomCard(6, [], allCards.get(roomId)),
               primary: true,
-              random: randomCard[0],
+              random: null,
             },
             closed: null,
             tableData: null,
@@ -33,17 +33,20 @@ const getio = (io) => {
           );
           let myCard = getRandomCard(6, [], newArrCardsData);
           newArrCardsData = newArrCards(myCard, newArrCardsData);
+          let random = getRandomCard(1, [], newArrCardsData);
+          newArrCardsData = newArrCards(random, newArrCardsData);
           rooms.set(roomId, {
             open: rooms.get(roomId).open,
             closed: {
               userName: userName,
               myCard: myCard,
               primary: false,
-              random: rooms.get(roomId).open.random,
+              random: random,
             },
             tableData: null,
             allCards: newArrCardsData,
           });
+          rooms.get(roomId).open.random = random;
 
           socket.emit("ROOM:SET_USERS", JSON.stringify(rooms.get(roomId).open));
           socket.emit(
@@ -87,18 +90,22 @@ const getio = (io) => {
     });
     const cardsData = {};
 
-    socket.on("RECEIVE:CARDS", ({ roomId, amount }) => {
+    socket.on("RECEIVE:CARDS", ({ roomId, amount, allCards }) => {
       try {
-        if (!rooms.get(roomId)) {
-          allCards.set(roomId, cardArr);
-        }
+        let cards = JSON.parse(allCards);
         socket.join(roomId);
-        cardsData.roomId = getRandomCard(JSON.parse(amount).index, [], cardArr);
+        cardsData.roomId = getRandomCard(JSON.parse(amount).index, [], cards);
+
         const data = JSON.stringify([
           ...JSON.parse(amount).cardData,
           ...cardsData.roomId,
         ]);
+        cards = newArrCards(cardsData.roomId, cards);
         socket.emit("RECEIVE:CARDS", table.roomId ? data : roomId);
+        socket.emit("ROOM:SET_USERS_CARDS", JSON.stringify(cards));
+        socket.broadcast
+          .to(roomId)
+          .emit("ROOM:SET_USERS_CARDS", JSON.stringify(cards));
       } catch (error) {}
       // socket.broadcast
       //   .to(roomId)
