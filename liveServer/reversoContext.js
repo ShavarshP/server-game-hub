@@ -90,7 +90,7 @@ const getio = (io) => {
     });
     // const cardsData = {};
 
-    socket.on("RECEIVE:CARDS", ({ roomId, amount, allCards }) => {
+    socket.on("NUMBER_OF_CARDS", ({ roomId, amount, allCards }) => {
       try {
         socket.join(roomId);
         let cards = JSON.parse(allCards).cardData;
@@ -111,6 +111,18 @@ const getio = (io) => {
       //     "RECEIVE:CARDS_LENGTH",
       //     table.roomId ? JSON.parse(data).length : roomId
       //   );
+    });
+
+    socket.on("NUMBER_OF_CARDS", ({ roomId, allCards }) => {
+      try {
+        socket.join(roomId);
+
+        // socket.emit("NUMBER_OF_CARDS", allCards);
+        socket.emit("NUMBER_OF_CARDS", allCards);
+        socket.broadcast.to(roomId).emit("NUMBER_OF_CARDS", allCards);
+      } catch (error) {
+        socket.emit("RECEIVE:CARDS", roomId);
+      }
     });
   });
 };
