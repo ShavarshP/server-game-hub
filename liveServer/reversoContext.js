@@ -99,10 +99,6 @@ const getio = (io) => {
         cards = newArrCards(cardsData.roomId, cards);
         const data = JSON.stringify(cards);
         socket.emit("RECEIVE:CARDS", table.roomId ? data : roomId);
-        socket.emit("ROOM:SET_USERS_CARDS", JSON.stringify(cards));
-        socket.broadcast
-          .to(roomId)
-          .emit("ROOM:SET_USERS_CARDS", JSON.stringify(cards));
       } catch (error) {}
       // socket.broadcast
       //   .to(roomId)
