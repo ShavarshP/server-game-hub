@@ -69,24 +69,26 @@ const getio = (io) => {
     });
     const table = {};
     socket.on("TABLE:DATA", ({ roomId, tableData }) => {
-      socket.join(roomId);
-      table.roomId = {
-        data: JSON.parse(tableData),
-        // index: [
-        //   rooms.get(roomId).closed.myCard.length,
-        //   rooms.get(roomId).open.myCard.length,
-        // ],
-      };
-      socket.emit(
-        "TABLE:DATA",
-        table.roomId ? JSON.stringify(table.roomId) : roomId
-      );
-      socket.broadcast
-        .to(roomId)
-        .emit(
+      try {
+        socket.join(roomId);
+        table.roomId = {
+          data: JSON.parse(tableData),
+          // index: [
+          //   rooms.get(roomId).closed.myCard.length,
+          //   rooms.get(roomId).open.myCard.length,
+          // ],
+        };
+        socket.emit(
           "TABLE:DATA",
           table.roomId ? JSON.stringify(table.roomId) : roomId
         );
+        socket.broadcast
+          .to(roomId)
+          .emit(
+            "TABLE:DATA",
+            table.roomId ? JSON.stringify(table.roomId) : roomId
+          );
+      } catch (error) {}
     });
     // const cardsData = {};
 
