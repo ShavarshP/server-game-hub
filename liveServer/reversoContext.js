@@ -1,14 +1,14 @@
 const { getRandomCard, newArrCards } = require("../game_func/reversContext");
 const { cardsList } = require("../static/play_cards");
 
-let cardArr = cardsList.filter((item) => item.index > 4);
+let cardArr = cardsList.filter((item) => item.index > 8);
 
 const getio = (io) => {
   const rooms = new Map();
   const allCards = new Map();
 
   io.on("connection", (socket) => {
-    cardArr = cardsList.filter((item) => item.index > 4);
+    cardArr = cardsList.filter((item) => item.index > 8);
     socket.on("ROOM:JOIN", ({ roomId, userName }) => {
       if (!rooms.get(roomId) || rooms.get(roomId).closed === null) {
         socket.join(roomId);
