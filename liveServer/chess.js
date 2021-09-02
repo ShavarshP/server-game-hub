@@ -2,39 +2,41 @@ const chessIo = (io) => {
   const rooms = new Map();
   io.on("connection", (socket) => {
     socket.on("ROOM:JOIN_CHESS", ({ roomId, userName }) => {
-      if (!rooms.get(roomId) || rooms.get(roomId).black === null) {
-        socket.join(roomId);
-        if (!rooms.get(roomId)) {
-          rooms.set(roomId, {
-            white: {
-              userName: userName,
-              colour: "white",
-            },
-            black: null,
-          });
-        } else {
-          rooms.set(roomId, {
-            white: rooms.get(roomId).white,
-            black: {
-              userName: userName,
-              colour: "black",
-            },
-          });
+      try {
+        if (!rooms.get(roomId) || rooms.get(roomId).black === null) {
+          socket.join(roomId);
+          if (!rooms.get(roomId)) {
+            rooms.set(roomId, {
+              white: {
+                userName: userName,
+                colour: "white",
+              },
+              black: null,
+            });
+          } else {
+            rooms.set(roomId, {
+              white: rooms.get(roomId).white,
+              black: {
+                userName: userName,
+                colour: "black",
+              },
+            });
 
-          socket.emit(
-            "ROOM:SET_USERS_CHESS",
-            JSON.stringify(rooms.get(roomId).white)
-          );
+            socket.emit(
+              "ROOM:SET_USERS_CHESS",
+              JSON.stringify(rooms.get(roomId).white)
+            );
+          }
+          socket.broadcast
+            .to(roomId)
+            .emit(
+              "ROOM:SET_USERS_CHESS",
+              JSON.stringify(rooms.get(roomId).black)
+            );
+        } else {
+          socket.emit("ROOM:SET_USERS_CHESS", "bum chaka-chaka");
         }
-        socket.broadcast
-          .to(roomId)
-          .emit(
-            "ROOM:SET_USERS_CHESS",
-            JSON.stringify(rooms.get(roomId).black)
-          );
-      } else {
-        socket.emit("ROOM:SET_USERS_CHESS", "bum chaka-chaka");
-      }
+      } catch (error) {}
     });
     const table = {};
     socket.on("TABLE:DATA_CHESS", ({ roomId, tableData }) => {
