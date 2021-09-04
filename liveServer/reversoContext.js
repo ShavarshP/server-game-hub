@@ -90,6 +90,22 @@ const getio = (io) => {
           );
       } catch (error) {}
     });
+    const msj = {};
+    socket.on("SAY:SOMETHING", ({ roomId, data }) => {
+      try {
+        socket.join(roomId);
+        msj.roomId = {
+          data: JSON.parse(data),
+        };
+
+        socket.broadcast
+          .to(roomId)
+          .emit(
+            "SAY:SOMETHING",
+            msj.roomId ? JSON.stringify(msj.roomId) : roomId
+          );
+      } catch (error) {}
+    });
     // const cardsData = {};
 
     socket.on("RECEIVE:CARDS", ({ roomId, amount, allCards }) => {

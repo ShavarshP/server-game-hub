@@ -51,6 +51,9 @@ const chessIo = (io) => {
         );
         socket.broadcast
           .to(roomId)
+
+
+          
           .emit(
             "TABLE:DATA_CHESS",
             table.roomId ? JSON.stringify(table.roomId) : roomId
