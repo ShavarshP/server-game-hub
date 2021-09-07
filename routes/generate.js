@@ -14,4 +14,25 @@ router.post("/generate", auth, async (req, res) => {
     res.status(500).json({ message: "Something went wrong, please try again" });
   }
 });
+
+router.get("/is_auth/:_id", async (req, res) => {
+  try {
+    const id = req.params;
+    const homedate = await Home.find(id);
+    res.json(homedate);
+  } catch (e) {
+    res.status(500).json({ message: "Что-то пошло не так, попробуйте снова" });
+  }
+});
+
+router.get("/is_auth/:_id", auth, async (req, res) => {
+  try {
+    const id = req.params;
+    const data = await Story.find({ owner: id });
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ message: "Something went wrong, please try again" });
+  }
+});
+
 module.exports = router;
