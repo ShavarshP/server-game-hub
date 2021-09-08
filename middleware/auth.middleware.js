@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 
 module.exports = (req, res, next) => {
-  console.log("maladec");
   if (req.method === "OPTIONS") {
     return next();
   }
