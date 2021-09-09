@@ -25,4 +25,16 @@ router.get("/is_auth/:_id", auth, async (req, res) => {
   }
 });
 
+router.put("/save_data_2048/:_id", auth, async (req, res) => {
+  try {
+    const newRecord = req.body.record;
+    const id = req.params;
+    const data = await Story.find({ owner: id });
+
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ message: "Something went wrong, please try again" });
+  }
+});
+
 module.exports = router;
