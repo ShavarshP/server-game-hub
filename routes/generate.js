@@ -39,4 +39,16 @@ router.put("/save_data_2048/:_id", auth, async (req, res) => {
   }
 });
 
+router.get("/losses/:_id", auth, async (req, res) => {
+  try {
+    const id = req.params;
+    const data = await Story.findOne({ owner: id });
+    await Story.updateOne({ owner: id }, { losses: data.losses + 1 });
+
+    res.json({ message: "chikipooki" });
+  } catch (e) {
+    res.status(500).json({ message: "Something went wrong, please try again" });
+  }
+});
+
 module.exports = router;
