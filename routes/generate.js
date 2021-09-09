@@ -18,7 +18,7 @@ router.post("/generate", auth, async (req, res) => {
 router.get("/is_auth/:_id", auth, async (req, res) => {
   try {
     const id = req.params;
-    const data = await Story.find({ owner: id });
+    const data = await Story.findOne({ owner: id });
     res.json(data);
   } catch (e) {
     res.status(500).json({ message: "Something went wrong, please try again" });
@@ -29,9 +29,11 @@ router.put("/save_data_2048/:_id", auth, async (req, res) => {
   try {
     const newRecord = req.body.record;
     const id = req.params;
-    const data = await Story.find({ owner: id });
-
-    res.json(data);
+    const data = await Story.findOne({ owner: id });
+    if (data.record2048 < Number(newRecord)) {
+      await Story.updateOne({ owner: id }, { record2048: Number(newRecord) });
+    }
+    res.json({ message: "chikipooki" });
   } catch (e) {
     res.status(500).json({ message: "Something went wrong, please try again" });
   }
