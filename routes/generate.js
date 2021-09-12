@@ -71,8 +71,8 @@ router.get("/rating/", async (req, res) => {
         name: item.userName,
         rating:
           item.victories === 0
-            ? 0
-            : (item.losses + item.victories) / item.victories,
+            ? 0.5
+            : item.victories / (item.losses + item.victories),
         rating_2048: item.record2048,
       };
     });
