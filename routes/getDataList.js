@@ -67,6 +67,7 @@ router.get("/fakeDate_play_cards", async (req, res) => {
     res.status(500).json({ message: "Something went wrong, please try again" });
   }
 });
+
 router.get("/fakelength_play_cards", async (req, res) => {
   try {
     res.json(length);

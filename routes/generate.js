@@ -66,6 +66,16 @@ router.get("/victories/:_id", auth, async (req, res) => {
 router.get("/rating/", async (req, res) => {
   try {
     const data = await Story.find();
+    const filtData = data.map((item) => {
+      return {
+        name: item.userName,
+        rating:
+          item.victories === 0
+            ? 0
+            : (item.losses + item.victories) / item.victories,
+        rating_2048: item.record2048,
+      };
+    });
     res.json({ data: data });
   } catch (e) {
     res.status(500).json({ message: "Something went wrong, please try again" });
