@@ -63,4 +63,13 @@ router.get("/victories/:_id", auth, async (req, res) => {
   }
 });
 
+router.get("/rating/", async (req, res) => {
+  try {
+    const data = await Story.find();
+    res.json({ data: data });
+  } catch (e) {
+    res.status(500).json({ message: "Something went wrong, please try again" });
+  }
+});
+
 module.exports = router;
