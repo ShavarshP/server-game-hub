@@ -76,7 +76,7 @@ router.get("/rating/", async (req, res) => {
         rating_2048: item.record2048,
       };
     });
-    res.json({ data: data });
+    res.json({ data: filtData });
   } catch (e) {
     res.status(500).json({ message: "Something went wrong, please try again" });
   }
