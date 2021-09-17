@@ -7,15 +7,15 @@ const app = express();
 const server = require("http").Server(app);
 
 const cors = require("cors");
-
-// const io = require("socket.io")(server, {
-//   cors: {
-//     origin: "*",
-//     methods: ["GET", "POST"],
-//     credentials: true,
-//   },
-// });
-
+const getio = require("./liveServer/reversoContext");
+const chessIo = require("./liveServer/chess");
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
 app.use(cors({ origin: "*" }));
 
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -28,6 +28,12 @@ app.use(
 );
 
 app.use("/api", require("./routes/authRoutes"));
+app.use("/api", require("./routes/getDataList"));
+app.use("/api", require("./routes/login"));
+app.use("/api", require("./routes/generate"));
+getio(io);
+chessIo(io);
+// app.use("/api/results", require("./routes/gameResults"));
 
 const PORT = 5000;
 async function start() {
